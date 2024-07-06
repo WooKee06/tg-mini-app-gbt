@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/tg-mini-app-gbt/static/css/main.af97ce91.css",
+    "main.js": "/tg-mini-app-gbt/static/js/main.0b365ce3.js",
+    "index.html": "/tg-mini-app-gbt/index.html",
+    "main.af97ce91.css.map": "/tg-mini-app-gbt/static/css/main.af97ce91.css.map",
+    "main.0b365ce3.js.map": "/tg-mini-app-gbt/static/js/main.0b365ce3.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.af97ce91.css",
+    "static/js/main.0b365ce3.js"
+  ]
+}
