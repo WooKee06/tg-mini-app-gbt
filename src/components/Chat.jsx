@@ -1,53 +1,50 @@
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { setUserInMessege } from '../store/messege/reducer' // исправьте путь, если нужно
+import { useDispatch, useSelector } from 'react-redux'
+import { setGptInMessege, setUserInMessege } from '../store/messege/reducer'
 
 const YourComponent = () => {
 	const [message, setMessage] = useState('')
-	const [reply, setReply] = useState('')
 	const dispatch = useDispatch()
+	const messageList = useSelector(state => state.messege.messegeList)
 
 	const handleSubmit = async () => {
-		// Проверка, что сообщение не пустое
 		if (!message.trim()) {
 			console.log('Message is empty')
-			setReply('Message cannot be empty')
 			return
 		}
 
 		try {
-			const response = await fetch(
-				'https://4d14-201-216-219-7.ngrok-free.app/ux/gpt/',
-				{
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					body: JSON.stringify({ message }),
+			const response = await fetch('https://yul.omra.rocks/ux/gpt/', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
 				},
-				[dispatch]
-			)
+				body: JSON.stringify({ message }),
+			})
 
 			if (!response.ok) {
 				const errorData = await response.json()
-				console.log('Error data:', errorData) // Проверка данных об ошибке
+				console.log('Error data:', errorData)
 				throw new Error(errorData.error || 'Something went wrong')
 			}
 
 			const data = await response.json()
 
 			if (data.response && data.response.content) {
-				setReply(data.response.content)
+				dispatch(setUserInMessege({ text: message, type: 'user' }))
+				dispatch(setGptInMessege({ text: data.response.content, type: 'gpt' }))
+				setMessage('')
 			} else {
-				setReply('No reply field in response')
+				console.error('No reply field in response')
 			}
-
-			setMessage('')
-			dispatch(setUserInMessege(message))
-			dispatch(setUserInMessege(data.response.content))
 		} catch (error) {
 			console.error('Error:', error.message)
-			setReply('Error: ' + error.message)
+		}
+	}
+
+	const handleKeyDown = event => {
+		if (event.key === 'Enter') {
+			handleSubmit()
 		}
 	}
 
@@ -73,8 +70,10 @@ const YourComponent = () => {
 					value={message}
 					onChange={e => setMessage(e.target.value)}
 					placeholder='Отправьте сообщение '
+					onKeyDown={handleKeyDown}
 				/>
 			</div>
+
 			<svg
 				width='20'
 				height='20'

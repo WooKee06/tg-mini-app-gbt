@@ -4,14 +4,13 @@ const messegeSlice = createSlice({
 	name: 'messege',
 	initialState: {
 		messegeList: [],
-		gptMessegeList: [],
 	},
 	reducers: {
 		setUserInMessege: (state, action) => {
 			state.messegeList.push(action.payload)
 		},
 		setGptInMessege: (state, action) => {
-			state.gptMessegeList.push(action.payload)
+			state.messegeList.push(action.payload)
 		},
 	},
 })
